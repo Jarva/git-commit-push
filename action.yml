@@ -90,12 +90,11 @@ runs:
           git branch git-commit-push-action-${{ github.run_id }}-${{ github.job }}
           git fetch "${{ inputs.remote_repository }}" "$CURRENT_BRANCH"
           git checkout "$CURRENT_BRANCH"
-          git merge git-commit-push-action-${{ github.run_id }}-${{ github.job }}
-          git branch -d git-commit-push-action-${{ github.run_id }}-${{ github.job }}
-
           if [ "${{ inputs.pull }}" != "0" ]; then
             git pull --rebase
           fi
+          git merge git-commit-push-action-${{ github.run_id }}-${{ github.job }}
+          git branch -d git-commit-push-action-${{ github.run_id }}-${{ github.job }}
 
           git push "${{ inputs.remote_repository }}" "$CURRENT_BRANCH:$TARGET_BRANCH" --follow-tags $FORCE $TAGS        
         else
