@@ -43,6 +43,10 @@ inputs:
     description: Whether to use --tags
     required: false
     default: '0'
+  pull:
+    description: Whether to pull --rebase before push
+    require: false
+    default: '0'
 
 runs:
   using: "composite"
@@ -88,6 +92,10 @@ runs:
           git checkout "$CURRENT_BRANCH"
           git merge git-commit-push-action-${{ github.run_id }}-${{ github.job }}
           git branch -d git-commit-push-action-${{ github.run_id }}-${{ github.job }}
+
+          if [ "${{ inputs.pull }}" != "0" ]; then
+            git pull --rebase
+          fi
 
           git push "${{ inputs.remote_repository }}" "$CURRENT_BRANCH:$TARGET_BRANCH" --follow-tags $FORCE $TAGS        
         else
